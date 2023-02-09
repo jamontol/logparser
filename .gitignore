@@ -6,6 +6,12 @@ slct
 __pycache__/
 *.py[cod]
 
+# Private data
+
+logs/Iber
+Drain_result_Iber
+Spell_result_Iber
+
 # Distribution / packaging
 .Python
 env/

@@ -295,12 +295,12 @@ class LogParser:
             line = re.sub(currentRex, '<*>', line)
         return line
 
-    def log_to_dataframe(self, log_file, regex, headers, logformat):
+    def log_to_dataframe(self, log_file, regex, headers, logformat, encoding="utf8"):
         """ Function to transform log file to dataframe 
         """
         log_messages = []
         linecount = 0
-        with open(log_file, 'r') as fin:
+        with open(log_file, 'r', encoding=encoding) as fin:
             for line in fin.readlines():
                 try:
                     match = regex.search(line.strip())
@@ -336,7 +336,8 @@ class LogParser:
         template_regex = re.sub(r"<.{1,5}>", "<*>", row["EventTemplate"])
         if "<*>" not in template_regex: return []
         template_regex = re.sub(r'([^A-Za-z0-9])', r'\\\1', template_regex)
-        template_regex = re.sub(r'\\ +', r'\s+', template_regex)
+        #template_regex = re.sub(r'\\ +', r'\s+', template_regex)
+        template_regex = re.sub(r'\\ +', r'\\s+', template_regex)
         template_regex = "^" + template_regex.replace("\<\*\>", "(.*?)") + "$"
         parameter_list = re.findall(template_regex, row["Content"])
         parameter_list = parameter_list[0] if parameter_list else ()

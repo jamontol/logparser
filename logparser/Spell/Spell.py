@@ -281,12 +281,12 @@ class LogParser:
             line = re.sub(currentRex, '<*>', line)
         return line
 
-    def log_to_dataframe(self, log_file, regex, headers, logformat):
+    def log_to_dataframe(self, log_file, regex, headers, logformat, encoding="utf8"):
         """ Function to transform log file to dataframe 
         """
         log_messages = []
         linecount = 0
-        with open(log_file, 'r') as fin:
+        with open(log_file, 'r', encoding=encoding) as fin:
             for line in fin.readlines():
                 line = re.sub(r'[^\x00-\x7F]+', '<NASCII>', line)
                 try:
@@ -309,7 +309,8 @@ class LogParser:
         regex = ''
         for k in range(len(splitters)):
             if k % 2 == 0:
-                splitter = re.sub(' +', '\s+', splitters[k])
+                # splitter = re.sub(' +', '\s+', splitters[k])
+                splitter = re.sub(' +', '\\\s+', splitters[k])
                 regex += splitter
             else:
                 header = splitters[k].strip('<').strip('>')
